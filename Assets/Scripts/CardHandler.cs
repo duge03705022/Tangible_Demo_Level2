@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class CardHandler : MonoBehaviour
 {
@@ -17,9 +18,9 @@ public class CardHandler : MonoBehaviour
 
     public bool[,,] canPlaceCard;
 
-    private GameObject[,,] cardInstance;
+    public GameObject[,,] cardInstance;
     public string[,,] lastBlockId;
-    private bool[,,] hasPlaced;
+    public bool[,,] hasPlaced;
 
     # endregion
 
@@ -51,10 +52,10 @@ public class CardHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        updateCards();
+        UpdateCards();
     }
 
-    private void updateCards()
+    private void UpdateCards()
     {
         for (int i = 0; i < RFIBParameter.stageCol; i++)
         {
@@ -91,7 +92,7 @@ public class CardHandler : MonoBehaviour
         hasPlaced[x, y, z] = true;
 
         //待改善
-        levelController.SetBugs(false);
+        levelController.SetAllBug(false);
     }
 
     private void DestroyCard(int x, int y, int z)
@@ -101,7 +102,7 @@ public class CardHandler : MonoBehaviour
         hasPlaced[x, y, z] = false;
 
         //待改善
-        levelController.SetBugs(false);
+        levelController.SetAllBug(false);
     }
 
     public void SetCanPlaceCard(string[] posSeries, bool TorF)

@@ -8,6 +8,8 @@ public class TouchHandler : MonoBehaviour
     public RFIBManager rFIBManager;
     public GameController gameController;
     public LevelController levelController;
+    public CardHandler cardHandler;
+    public LevelParameter levelParameter;
 
     # region Touch Parameter
     private bool ifTouch;
@@ -27,7 +29,10 @@ public class TouchHandler : MonoBehaviour
 
     # endregion
 
+    public Sprite[] loopSprite;
     public GameObject recipeInstance;
+
+    private bool[] openNumPad;
 
     // Start is called before the first frame update
     void Start()
@@ -46,6 +51,12 @@ public class TouchHandler : MonoBehaviour
         touchHistory = new Tuple<int, int>[RFIBParameter.maxTouch];
         touchHistoryCount = 0;
         swipeDirection = "None";
+
+        openNumPad = new bool[levelParameter.stageLoop];
+        for (int i = 0; i < levelParameter.stageLoop; i++)
+        {
+            openNumPad[i] = true;
+        }
     }
 
     // Update is called once per frame
@@ -211,6 +222,8 @@ public class TouchHandler : MonoBehaviour
 
     private void Click(int x, int y)
     {
+
+        Debug.Log(string.Format("{0}, {1}, {2}", x % 3, y % 3, (y % 3 * (-1) + 2) * 3 + x % 3 + 1));
         if (GameParameter.playBtnPos.Equals(Tuple.Create(x / 3, y / 3)))
         {
             levelController.StartCooking();
@@ -219,6 +232,24 @@ public class TouchHandler : MonoBehaviour
         else if (GameParameter.recipeBtnPos.Equals(Tuple.Create(x / 3, y / 3)))
         {
             recipeInstance.SetActive(!recipeInstance.activeSelf);
+        }
+        else if (cardHandler.hasPlaced[x / 3, y / 3, 1] && 
+            levelController.cardMap[x / 3, y / 3, 0].Item1 == "Loop" && 
+            levelController.cardMap[x / 3, y / 3, 1].Item1 == "NumPad" &&
+            openNumPad[levelController.cardMap[x / 3, y / 3, 1].Item2])
+        {
+            levelController.SetLoopCount(levelController.cardMap[x / 3, y / 3, 1].Item2, (y % 3 * (-1) + 2) * 3 + x % 3 + 1);
+            cardHandler.cardInstance[x / 3, y / 3, 1].SetActive(false);
+            cardHandler.cardInstance[x / 3, y / 3, 0].GetComponent<SpriteRenderer>().sprite = loopSprite[(y % 3 * (-1) + 2) * 3 + x % 3 + 1];
+            openNumPad[levelController.cardMap[x / 3, y / 3, 1].Item2] = false;
+        }
+        else if (cardHandler.hasPlaced[x / 3, y / 3, 1] &&
+            levelController.cardMap[x / 3, y / 3, 0].Item1 == "Loop" &&
+            levelController.cardMap[x / 3, y / 3, 1].Item1 == "NumPad" &&
+            !openNumPad[levelController.cardMap[x / 3, y / 3, 1].Item2])
+        {
+            openNumPad[levelController.cardMap[x / 3, y / 3, 1].Item2] = true;
+            cardHandler.cardInstance[x / 3, y / 3, 1].SetActive(true);
         }
 
         touchAction = "ClickDone";
@@ -279,6 +310,87 @@ public class TouchHandler : MonoBehaviour
         else
         {
             rFIBManager.touchBlock[25, 1] = false;
+        }
+
+        if (Input.GetKey("1"))
+        {
+            rFIBManager.touchBlock[3, 5] = true;
+        }
+        else
+        {
+            rFIBManager.touchBlock[3, 5] = false;
+        }
+
+        if (Input.GetKey("2"))
+        {
+            rFIBManager.touchBlock[4, 5] = true;
+        }
+        else
+        {
+            rFIBManager.touchBlock[4, 5] = false;
+        }
+
+        if (Input.GetKey("3"))
+        {
+            rFIBManager.touchBlock[5, 5] = true;
+        }
+        else
+        {
+            rFIBManager.touchBlock[5, 5] = false;
+        }
+
+        if (Input.GetKey("4"))
+        {
+            rFIBManager.touchBlock[3, 4] = true;
+        }
+        else
+        {
+            rFIBManager.touchBlock[3, 4] = false;
+        }
+
+        if (Input.GetKey("5"))
+        {
+            rFIBManager.touchBlock[4, 4] = true;
+        }
+        else
+        {
+            rFIBManager.touchBlock[4, 4] = false;
+        }
+
+        if (Input.GetKey("6"))
+        {
+            rFIBManager.touchBlock[5, 4] = true;
+        }
+        else
+        {
+            rFIBManager.touchBlock[5, 4] = false;
+        }
+
+        if (Input.GetKey("7"))
+        {
+            rFIBManager.touchBlock[3, 3] = true;
+        }
+        else
+        {
+            rFIBManager.touchBlock[3, 3] = false;
+        }
+
+        if (Input.GetKey("8"))
+        {
+            rFIBManager.touchBlock[4, 3] = true;
+        }
+        else
+        {
+            rFIBManager.touchBlock[4, 3] = false;
+        }
+
+        if (Input.GetKey("9"))
+        {
+            rFIBManager.touchBlock[5, 3] = true;
+        }
+        else
+        {
+            rFIBManager.touchBlock[5, 3] = false;
         }
     }
 }

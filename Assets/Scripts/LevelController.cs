@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
+using System;
 
 public class LevelController : MonoBehaviour
 {
@@ -15,12 +17,16 @@ public class LevelController : MonoBehaviour
     public int startX;
     public int startY;
 
+    public Tuple<string, int>[,,] cardMap;
+
     public GameObject[] chef;
     public GameObject[] ingredientStep;
 
     public GameObject dish;
     public GameObject basket;
 
+    private int[] loopCount;
+    public bool[] ifLoop;
     public GameObject[] hints;
     public GameObject[] bugs;
     public int[] answer;
@@ -32,6 +38,11 @@ public class LevelController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        cardMap = new Tuple<string, int>[RFIBParameter.stageCol, RFIBParameter.stageRow, RFIBParameter.maxHight];
+        SetCardMap(levelParameter.cardMapStr);
+
+        loopCount = new int[levelParameter.stageLoop];
+        ifLoop = new bool[levelParameter.stageLoop];
         ResetDish();
     }
 
@@ -45,7 +56,7 @@ public class LevelController : MonoBehaviour
     {
         gameFail = false;
         SetHints(false);
-        SetBugs(false);
+        SetAllBug(false);
         cardHandler.SetCardTrans(true);
         Debug.Log("Game Start!");
         StartCoroutine(CookingProcess());
@@ -73,12 +84,12 @@ public class LevelController : MonoBehaviour
     {
         if (!gameFail)
         {
-            yield return StartCoroutine(DishMove("Right", 3));
+            yield return StartCoroutine(DishMove("Right", 1));
         }
 
         if (!gameFail)
         {
-            yield return StartCoroutine(CheckProcess(0));
+            yield return StartCoroutine(CheckLoop(0, 0, 0));
         }
 
         if (!gameFail)
@@ -88,7 +99,98 @@ public class LevelController : MonoBehaviour
 
         if (!gameFail)
         {
-            yield return StartCoroutine(CheckProcess(1));
+            yield return StartCoroutine(CheckProcess(1, 1, 0, new int[] { 0 }, new int[] { 3 }));
+        }
+
+        if (!gameFail)
+        {
+            yield return StartCoroutine(DishMove("Right", 1));
+        }
+
+        if (ifLoop[0])
+        {
+            if (!gameFail)
+            {
+                yield return StartCoroutine(DishMove("Up", 2));
+            }
+
+            if (!gameFail)
+            {
+                yield return StartCoroutine(DishMove("Left", 3));
+            }
+
+            if (!gameFail)
+            {
+                yield return StartCoroutine(DishMove("Down", 2));
+            }
+
+            if (!gameFail)
+            {
+                yield return StartCoroutine(CheckLoop(0, 0, 0));
+            }
+
+            if (!gameFail)
+            {
+                yield return StartCoroutine(DishMove("Right", 2));
+            }
+
+            if (!gameFail)
+            {
+                yield return StartCoroutine(CheckProcess(1, 1, 0, new int[] { 1 }, new int[] { 4 }));
+            }
+
+            if (!gameFail)
+            {
+                yield return StartCoroutine(DishMove("Right", 1));
+            }
+        }
+
+        if (ifLoop[0])
+        {
+            if (!gameFail)
+            {
+                yield return StartCoroutine(DishMove("Up", 2));
+            }
+
+            if (!gameFail)
+            {
+                yield return StartCoroutine(DishMove("Left", 3));
+            }
+
+            if (!gameFail)
+            {
+                yield return StartCoroutine(DishMove("Down", 2));
+            }
+
+            if (!gameFail)
+            {
+                yield return StartCoroutine(CheckLoop(0, 0, 0));
+            }
+
+            if (!gameFail)
+            {
+                yield return StartCoroutine(DishMove("Right", 2));
+            }
+
+            if (!gameFail)
+            {
+                yield return StartCoroutine(CheckProcess(1, 1, 0, new int[] { 2 }, new int[] { 5 }));
+            }
+
+            if (!gameFail)
+            {
+                yield return StartCoroutine(DishMove("Right", 1));
+            }
+        }
+
+        if (!gameFail)
+        {
+            yield return StartCoroutine(DishMove("Right", 1));
+        }
+
+        if (!gameFail)
+        {
+            yield return StartCoroutine(CheckProcess(2, 2, 1, new int[] { 3, 4, 5 }, new int[] { 6 }, 0));
         }
 
         if (!gameFail)
@@ -128,19 +230,74 @@ public class LevelController : MonoBehaviour
         }
     }
 
-    public IEnumerator CheckProcess(int chefNum)
+    public IEnumerator CheckProcess(int cardId, int ansId, int chefNum, int[] hideIngredient, int[] showIngredient, int loopNum = -1)
     {
-        string[] chefPosXY = levelParameter.canPlaceCardPos[chefNum].Split(',');
-        if (RFIBParameter.SearchCard(rFIBManager.blockId[int.Parse(chefPosXY[0]), int.Parse(chefPosXY[1]), 0]) == answer[chefNum])
+        bool ifIngredientRight = true;
+        string[] chefPosXY = levelParameter.canPlaceCardPos[cardId].Split(',');
+
+        for (int i = 0; i < hideIngredient.Length; i++)
         {
-            ingredientStep[chefNum].SetActive(false);
-            chef[chefNum].SendMessage("StartAct");
-            yield return new WaitForSeconds(2f);
-            ingredientStep[chefNum + 1].SetActive(true);
+            if (!ingredientStep[hideIngredient[i]].activeSelf)
+            {
+                ifIngredientRight = false;
+            }
+        }
+
+        if (RFIBParameter.SearchCard(rFIBManager.blockId[int.Parse(chefPosXY[0]), int.Parse(chefPosXY[1]), 0]) == answer[ansId])
+        {
+            if (ifIngredientRight)
+            {
+                for (int i = 0; i < hideIngredient.Length; i++)
+                {
+                    ingredientStep[hideIngredient[i]].SetActive(false);
+                }
+                chef[chefNum].GetComponent<ChefAct>().StartAct();
+                yield return new WaitForSeconds(2f);
+                for (int i = 0; i < showIngredient.Length; i++)
+                {
+                    ingredientStep[showIngredient[i]].SetActive(true);
+                }
+            }
+            else
+            {
+                if (loopNum != -1)
+                {
+                    SetBug(loopNum, true);
+                }
+                yield return new WaitForSeconds(1.5f);
+                FailCooking();
+            }
         }
         else
         {
-            SetBug(chefNum, true);
+            SetBug(ansId, true);
+            yield return new WaitForSeconds(1.5f);
+            FailCooking();
+        }
+    }
+
+    public IEnumerator CheckLoop(int cardId, int ansId, int loopNum)
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        string[] loopPosXY = levelParameter.canPlaceCardPos[cardId].Split(',');
+
+        if (RFIBParameter.SearchCard(rFIBManager.blockId[int.Parse(loopPosXY[0]), int.Parse(loopPosXY[1]), 0]) == answer[ansId] ||
+            RFIBParameter.SearchCard(rFIBManager.blockId[int.Parse(loopPosXY[0]), int.Parse(loopPosXY[1]), 0]) == -1)
+        {
+            if (loopCount[loopNum] > 1)
+            {
+                loopCount[loopNum]--;
+                ifLoop[loopNum] = true;
+            }
+            else
+            {
+                ifLoop[loopNum] = false;
+            }
+        }
+        else
+        {
+            SetBug(ansId, true);
             yield return new WaitForSeconds(1.5f);
             FailCooking();
         }
@@ -148,14 +305,12 @@ public class LevelController : MonoBehaviour
 
     private void ResetDish()
     {
-        ingredientStep[0].SetActive(true);
-        ingredientStep[1].SetActive(true);
-        ingredientStep[2].SetActive(true);
+        ResetIngredient(new int[] { 0, 1, 2 });
         dish.transform.localPosition = new Vector3(
             startX * GameParameter.stageGap,
             startY * GameParameter.stageGap,
             0);
-        
+
         SetHints(true);
     }
 
@@ -173,11 +328,40 @@ public class LevelController : MonoBehaviour
         Debug.Log("Game Over...");
     }
 
-    public void SetBugs(bool TorF)
+    public void SetAllBug(bool TorF)
     {
         for (int i = 0; i < bugs.Length; i++)
         {
             bugs[i].SetActive(TorF);
+        }
+    }
+
+    public void SetLoopCount(int loopId, int count)
+    {
+        loopCount[loopId] = count;
+    }
+
+    private void ResetIngredient(int[] ingredientId)
+    {
+        for (int i = 0; i < ingredientStep.Length; i++)
+        {
+            if (ingredientId.Contains(i))
+            {
+                ingredientStep[i].SetActive(true);
+            }
+            else
+            {
+                ingredientStep[i].SetActive(false);
+            }
+        }
+    }
+
+    private void SetCardMap(string[] cardMapStr)
+    {
+        for (int i = 0; i < cardMapStr.Length; i++)
+        {
+            string[] cardInfo = cardMapStr[i].Split(',');
+            cardMap[int.Parse(cardInfo[0]), int.Parse(cardInfo[1]), int.Parse(cardInfo[2])] = Tuple.Create(cardInfo[3], int.Parse(cardInfo[4]));
         }
     }
 }

@@ -143,11 +143,11 @@ public class RFIBManager : MonoBehaviour
     bool tmpFlag4 = false;
     public void KeyPressed()
     {
-        if (Input.GetKeyUp("1"))
+        if (Input.GetKeyUp("a"))
         {
             tmpFlag1 = true;
         }
-        if (Input.GetKeyUp("2"))
+        if (Input.GetKeyUp("s"))
         {
             tmpFlag1 = false;
         }
@@ -156,11 +156,11 @@ public class RFIBManager : MonoBehaviour
             RFIB._Testing_AddTestingTemporarilyTag("8940 0000 9999 0101 0001", "8940 0000 8001 0301 0001");
         }
 
-        if (Input.GetKeyUp("3"))
+        if (Input.GetKeyUp("d"))
         {
             tmpFlag2 = true;
         }
-        if (Input.GetKeyUp("4"))
+        if (Input.GetKeyUp("f"))
         {
             tmpFlag2 = false;
         }
@@ -169,11 +169,11 @@ public class RFIBManager : MonoBehaviour
             RFIB._Testing_AddTestingTemporarilyTag("8940 0000 9999 0301 0001", "8940 0000 7101 0101 0001");
         }
 
-        if (Input.GetKeyUp("5"))
+        if (Input.GetKeyUp("g"))
         {
             tmpFlag3 = true;
         }
-        if (Input.GetKeyUp("6"))
+        if (Input.GetKeyUp("h"))
         {
             tmpFlag3 = false;
         }
@@ -182,11 +182,11 @@ public class RFIBManager : MonoBehaviour
             RFIB._Testing_AddTestingTemporarilyTag("8940 0000 9999 0501 0001", "8940 0000 7201 0201 0001");
         }
 
-        if (Input.GetKeyUp("q"))
+        if (Input.GetKeyUp("z"))
         {
             tmpFlag4 = true;
         }
-        if (Input.GetKeyUp("w"))
+        if (Input.GetKeyUp("x"))
         {
             tmpFlag4 = false;
         }
