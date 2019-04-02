@@ -33,6 +33,8 @@ public class LevelController : MonoBehaviour
 
     public bool gameFail;
 
+    public GameObject finishPage;
+
     # endregion
 
     // Start is called before the first frame update
@@ -67,6 +69,8 @@ public class LevelController : MonoBehaviour
         basket.SetActive(false);
         Debug.Log("Game Finish!!!");
 
+        finishPage.SetActive(true);
+
         gameController.playing = false;
         cardHandler.SetCardTrans(false);
         SetHints(true);
@@ -84,7 +88,7 @@ public class LevelController : MonoBehaviour
     {
         if (!gameFail)
         {
-            yield return StartCoroutine(DishMove("Right", 1));
+            yield return StartCoroutine(DishMove("Right", 2));
         }
 
         if (!gameFail)
@@ -195,7 +199,7 @@ public class LevelController : MonoBehaviour
 
         if (!gameFail)
         {
-            yield return StartCoroutine(DishMove("Right", 3));
+            yield return StartCoroutine(DishMove("Right", 2));
         }
 
         if (!gameFail)

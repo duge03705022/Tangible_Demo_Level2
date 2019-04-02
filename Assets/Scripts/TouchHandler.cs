@@ -314,83 +314,83 @@ public class TouchHandler : MonoBehaviour
 
         if (Input.GetKey("1"))
         {
-            rFIBManager.touchBlock[3, 5] = true;
+            rFIBManager.touchBlock[6, 5] = true;
         }
         else
         {
-            rFIBManager.touchBlock[3, 5] = false;
+            rFIBManager.touchBlock[6, 5] = false;
         }
 
         if (Input.GetKey("2"))
         {
-            rFIBManager.touchBlock[4, 5] = true;
+            rFIBManager.touchBlock[7, 5] = true;
         }
         else
         {
-            rFIBManager.touchBlock[4, 5] = false;
+            rFIBManager.touchBlock[7, 5] = false;
         }
 
         if (Input.GetKey("3"))
         {
-            rFIBManager.touchBlock[5, 5] = true;
+            rFIBManager.touchBlock[8, 5] = true;
         }
         else
         {
-            rFIBManager.touchBlock[5, 5] = false;
+            rFIBManager.touchBlock[8, 5] = false;
         }
 
         if (Input.GetKey("4"))
         {
-            rFIBManager.touchBlock[3, 4] = true;
+            rFIBManager.touchBlock[6, 4] = true;
         }
         else
         {
-            rFIBManager.touchBlock[3, 4] = false;
+            rFIBManager.touchBlock[6, 4] = false;
         }
 
         if (Input.GetKey("5"))
         {
-            rFIBManager.touchBlock[4, 4] = true;
+            rFIBManager.touchBlock[7, 4] = true;
         }
         else
         {
-            rFIBManager.touchBlock[4, 4] = false;
+            rFIBManager.touchBlock[7, 4] = false;
         }
 
         if (Input.GetKey("6"))
         {
-            rFIBManager.touchBlock[5, 4] = true;
+            rFIBManager.touchBlock[8, 4] = true;
         }
         else
         {
-            rFIBManager.touchBlock[5, 4] = false;
+            rFIBManager.touchBlock[8, 4] = false;
         }
 
         if (Input.GetKey("7"))
         {
-            rFIBManager.touchBlock[3, 3] = true;
+            rFIBManager.touchBlock[6, 3] = true;
         }
         else
         {
-            rFIBManager.touchBlock[3, 3] = false;
+            rFIBManager.touchBlock[6, 3] = false;
         }
 
         if (Input.GetKey("8"))
         {
-            rFIBManager.touchBlock[4, 3] = true;
+            rFIBManager.touchBlock[7, 3] = true;
         }
         else
         {
-            rFIBManager.touchBlock[4, 3] = false;
+            rFIBManager.touchBlock[7, 3] = false;
         }
 
         if (Input.GetKey("9"))
         {
-            rFIBManager.touchBlock[5, 3] = true;
+            rFIBManager.touchBlock[8, 3] = true;
         }
         else
         {
-            rFIBManager.touchBlock[5, 3] = false;
+            rFIBManager.touchBlock[8, 3] = false;
         }
     }
 }

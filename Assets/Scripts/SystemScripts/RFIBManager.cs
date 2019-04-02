@@ -134,7 +134,22 @@ public class RFIBManager : MonoBehaviour
 
     private void TouchSensing()
     {
-        
+        blockController.updateArduinoData();
+
+        if (blockController.touchedColBlock != -1 && blockController.touchedRowBlock != -1)
+        {
+            touchBlock[blockController.touchedColBlock, blockController.touchedRowBlock] = true;
+        }
+        else
+        {
+            for (int i = 0; i < RFIBParameter.touchCol; i++)
+            {
+                for (int j = 0; j < RFIBParameter.touchRow; j++)
+                {
+                    touchBlock[i, j] = false;
+                }
+            }
+        }
     }
 
     bool tmpFlag1 = false;
@@ -153,7 +168,7 @@ public class RFIBManager : MonoBehaviour
         }
         if (tmpFlag1)
         {
-            RFIB._Testing_AddTestingTemporarilyTag("8940 0000 9999 0101 0001", "8940 0000 8001 0301 0001");
+            RFIB._Testing_AddTestingTemporarilyTag("8940 0000 9999 0201 0001", "8940 0000 8001 0301 0001");
         }
 
         if (Input.GetKeyUp("d"))
@@ -166,7 +181,7 @@ public class RFIBManager : MonoBehaviour
         }
         if (tmpFlag2)
         {
-            RFIB._Testing_AddTestingTemporarilyTag("8940 0000 9999 0301 0001", "8940 0000 7101 0101 0001");
+            RFIB._Testing_AddTestingTemporarilyTag("8940 0000 9999 0401 0001", "8940 0000 7101 0101 0001");
         }
 
         if (Input.GetKeyUp("g"))
@@ -179,7 +194,7 @@ public class RFIBManager : MonoBehaviour
         }
         if (tmpFlag3)
         {
-            RFIB._Testing_AddTestingTemporarilyTag("8940 0000 9999 0501 0001", "8940 0000 7201 0201 0001");
+            RFIB._Testing_AddTestingTemporarilyTag("8940 0000 9999 0601 0001", "8940 0000 7201 0201 0001");
         }
 
         if (Input.GetKeyUp("z"))
